@@ -1,0 +1,31 @@
+; Plantilla de LiveCompare para el laboratorio.
+; Copia y reemplaza los placeholders. NO versiones credenciales reales.
+; El wrapper scripts/12_livecompare.sh genera una versión con credenciales.
+
+[General Settings]
+logical_replication_mode = off
+max_parallel_workers = 2
+oracle_user_tables_only = on
+oracle_ignore_unsortable = on
+column_intersection = on
+difference_tie_breakers = oracle
+schema_qualified_table_names = off
+
+[Oracle Connection]
+technology = oracle
+host = localhost
+port = 1521
+service = FREEPDB1
+user = ventas
+password = CAMBIAR
+
+[EDB Connection]
+technology = postgresql
+dsn = host=localhost port=5444 dbname=ventas user=ventas password=CAMBIAR
+start_query = SET search_path = ventas, public
+
+[Output Connection]
+dsn = host=localhost port=5444 dbname=livecompare user=ventas password=CAMBIAR
+
+[Table Filter]
+tables = table_name in ('regiones','paises','clientes','direcciones_entrega','categorias','productos','empleados','pedidos','pedido_detalle','pagos','auditoria_cambios','precios_historial')

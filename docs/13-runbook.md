@@ -190,7 +190,21 @@ make benchmark
 
 Genera `migration/reports/benchmark.md`. Recuerda que es indicativo.
 
-## 10. Flujo completo
+## 10. Herramientas EDB (opcional)
+
+Si tienes las herramientas comerciales instaladas:
+
+```bash
+make tools-check        # qué hay disponible
+make portal-export      # DDL para Migration Portal
+make mtk-schema         # DDL offline con MTK
+make edbldr-demo        # carga con EDB*Loader
+make livecompare-grant  # comparación con LiveCompare
+```
+
+Detalles: [18-herramientas-edb.md](18-herramientas-edb.md).
+
+## 11. Flujo completo
 
 ```bash
 make env
@@ -214,7 +228,7 @@ make all
 make validate
 ```
 
-## 11. Reconstruir desde cero
+## 12. Reconstruir desde cero
 
 ```bash
 make reset
@@ -223,7 +237,7 @@ make reset
 Borra volúmenes, levanta, carga Oracle, crea EPAS, migra y hace post-carga.
 No ejecuta la validación final para que puedas revisar los reportes.
 
-## 12. Detener
+## 13. Detener
 
 ```bash
 make down                 # conserva datos

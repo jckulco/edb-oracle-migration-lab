@@ -137,6 +137,9 @@ base de datos y EPAS ejecuta `initdb`.
 | `EDB_DB` | Sí | Base de datos destino |
 | `EDB_HOST` / `EDB_PORT` | Sí | Conexión del ETL |
 | `ETL_BATCH_SIZE` | No | Filas por fetch; 1000 por defecto |
+| `EDB_LIVECOMPARE_DB` | No | Base de salida de LiveCompare; `livecompare` |
+| `MTK_HOME` | No | Instalación de EDB Migration Toolkit |
+| `LIVECOMPARE_BIN` | No | Binario de LiveCompare; `livecompare` |
 
 ## Verificación rápida
 

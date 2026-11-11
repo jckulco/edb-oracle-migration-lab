@@ -25,6 +25,11 @@ pensado para leerse en orden, pero cada documento es autocontenido.
 | 15 | [Post-migración](15-post-migracion.md) | Cutover, performance, seguridad y operación |
 | 16 | [Ora2Pg](16-ora2pg.md) | La herramienta complementaria |
 | 17 | [Referencias](17-referencias.md) | Enlaces oficiales y lecturas |
+| 18 | [Herramientas EDB](18-herramientas-edb.md) | Portal, MTK, LiveCompare, EDB*Loader, Copilot y CDC |
+| 19 | [Migration Toolkit](19-mtk.md) | MTK offline/online, configuración y artefactos |
+| 20 | [Migration Portal](20-migration-portal.md) | Exportar DDL, evaluar y usar AI Copilot |
+| 21 | [LiveCompare](21-livecompare.md) | Comparación fila a fila Oracle vs EPAS |
+| 22 | [Replication Server](22-replication-server.md) | CDC, cutover y fallback |
 
 ## Convenciones
 

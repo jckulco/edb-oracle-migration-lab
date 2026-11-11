@@ -118,3 +118,24 @@ edb_scalar() {
         -U "${EDB_APP_USER}" -d "${EDB_DB}" -f - \
     | tr -d '[:space:]'
 }
+
+# SQL*Plus como SYSDBA en el PDB (para grants opcionales de herramientas).
+oracle_sys_sql() {
+  local sql="$1"
+  printf 'WHENEVER SQLERROR EXIT SQL.SQLCODE\n%s\nEXIT\n' "${sql}" \
+    | compose exec -T oracle sqlplus -S -L \
+        "sys/${ORACLE_PASSWORD}@//localhost:1521/${ORACLE_PDB} as sysdba"
+}
+
+# edb-psql como superusuario enterprisedb (socket local, trust).
+edb_super_sql() {
+  printf '%s\n' "$1" | compose exec -T edb edb-psql \
+    -X -v ON_ERROR_STOP=1 -U enterprisedb -d postgres -f -
+}
+
+edb_super_scalar() {
+  printf '\\pset tuples_only on\n\\pset format unaligned\n%s;\n' "$1" \
+    | compose exec -T edb edb-psql -X -v ON_ERROR_STOP=1 \
+        -U enterprisedb -d postgres -f - \
+    | tr -d '[:space:]'
+}

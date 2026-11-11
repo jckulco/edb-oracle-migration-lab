@@ -220,6 +220,31 @@ docker compose --env-file .env -f docker/compose.yaml exec edb \
 Si usas WSL2, `localhost` puede no ser el host de Docker; prueba
 `host.docker.internal` o la IP de la distro.
 
+## Herramientas EDB
+
+| Síntoma | Causa | Solución |
+|---|---|---|
+| `runMTK.sh: not found` | MTK no instalado o `MTK_HOME` incorrecto | Ajusta `MTK_HOME`/`MTK_BIN`; ver `docs/19-mtk.md` |
+| `Invalid file permissions` en MTK | `toolkit.properties` no legible | `chmod 600` y dueño correcto |
+| `toolkit.properties` no existe | MTK no configurado | Copia la plantilla o usa `--write-properties` |
+| `livecompare: command not found` | LiveCompare no instalado | Instálalo o define `LIVECOMPARE_BIN` |
+| LiveCompare: `Output connection is not reachable` | Base `livecompare` no existe | `./scripts/12_livecompare.sh` la crea; revisa puerto/credenciales |
+| LiveCompare: `ORA-00942` | Grants Oracle insuficientes | `./scripts/12_livecompare.sh --grant` |
+| LiveCompare: `DPY-3012` | NCHAR/NCLOB y thin mode | `oracle_thick_mode = on` + Instant Client |
+| `edbldr: command not found` | No estás en el contenedor EPAS | `make edbldr-demo` ejecuta dentro |
+| EDB*Loader: `SQL*Loader-...` / bad file | Formato/columna incorrecta | Revisa `regiones.bad` y `regiones.log` |
+| `make portal-export` falla | Oracle no healthy o `DBMS_METADATA` sin permiso | `make ps`; revisa grants |
+| Portal no acepta el ZIP | Formato/navegador | Sube el `.sql` directamente |
+| Copilot sugiere algo que no compila | Alucinación/versión distinta | Verifica en EPAS y ejecuta `make validate` |
+
+Los reportes de herramientas quedan en:
+
+```text
+migration/reports/portal/
+migration/reports/mtk/
+migration/reports/livecompare/
+```
+
 ## Limpieza total
 
 ```bash

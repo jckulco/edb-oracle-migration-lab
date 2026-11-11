@@ -30,7 +30,18 @@
 - `EXPLAIN`: <https://www.postgresql.org/docs/16/sql-explain.html>
 - `pg_stat_statements`: <https://www.postgresql.org/docs/16/pgstatstatements.html>
 
-## Herramientas
+## Herramientas EDB de migración
+
+- Migration Portal: <https://www.enterprisedb.com/docs/migration_portal/latest/>
+- Migration Portal (servicio): <https://migration.enterprisedb.com/>
+- AI Copilot: <https://www.enterprisedb.com/docs/migration_portal/latest/03_mp_using_portal/mp_ai_copilot/>
+- Migration Toolkit: <https://www.enterprisedb.com/docs/migration_toolkit/latest/>
+- LiveCompare: <https://www.enterprisedb.com/docs/livecompare/latest/>
+- LiveCompare, Oracle: <https://www.enterprisedb.com/docs/livecompare/latest/oracle_support/>
+- Replication Server: <https://www.enterprisedb.com/docs/eprs/latest/>
+- EDB*Loader: <https://www.enterprisedb.com/docs/epas/latest/database_administration/02_edb_loader/>
+
+## Otras herramientas
 
 - Ora2Pg: <https://github.com/darold/ora2pg>
 - Ora2Pg documentation: <https://ora2pg.darold.net/>

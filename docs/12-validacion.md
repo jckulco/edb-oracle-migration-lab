@@ -199,6 +199,19 @@ hay un bug en la semilla o en la migración.
 `migration/reports/validation.json` es apto para CI o para adjuntar a un
 ticket de cambio.
 
+## Validación con herramientas EDB
+
+Además del validador propio, puedes usar **EDB LiveCompare** para comparar
+Oracle y EPAS fila a fila:
+
+```bash
+make livecompare-grant   # otorga grants y compara
+```
+
+LiveCompare y `validate.py` son complementarios: el primero aporta la mirada
+de la herramienta comercial; el segundo, checksums canónicos y pruebas de
+negocio. Detalles en [21-livecompare.md](21-livecompare.md).
+
 ## Criterios de aceptación
 
 | Criterio | Umbral |

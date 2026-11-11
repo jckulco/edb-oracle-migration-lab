@@ -1,0 +1,12 @@
+# Plantilla de toolkit.properties para el laboratorio.
+# Cópiala a /usr/edb/migrationtoolkit/etc/toolkit.properties
+# o ejecuta: ./scripts/10_mtk.sh offline-schema --write-properties
+#
+# Formato: sin comillas alrededor de los valores.
+SRC_DB_URL=jdbc:oracle:thin:@//localhost:1521/FREEPDB1
+SRC_DB_USER=ventas
+SRC_DB_PASSWORD=VentasLab_2026
+
+TARGET_DB_URL=jdbc:edb://localhost:5444/ventas
+TARGET_DB_USER=ventas
+TARGET_DB_PASSWORD=VentasLab_2026

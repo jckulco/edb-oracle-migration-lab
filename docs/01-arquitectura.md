@@ -36,6 +36,7 @@ flowchart LR
 | `edb` | Imagen oficial EPAS + entrypoint propio | 5444 | Destino; base `ventas`, esquema `ventas` |
 | ETL | Python 3.11+, `oracledb` thin, `psycopg` 3 | — | Assessment, carga y validación |
 | Reportes | JSON + Markdown | — | Evidencia de la migración |
+| Herramientas EDB | Portal, MTK, LiveCompare, EDB*Loader | — | Evaluación, conversión y validación opcionales |
 | CI | GitHub Actions | — | Lint, compilación y pruebas unitarias |
 
 ## Flujo por fases

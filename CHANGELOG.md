@@ -4,6 +4,21 @@ Todas las modificaciones relevantes de este proyecto se documentan aquí.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.1.0/)
 y el proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.1.0] - 2026-11-10
+
+### Añadido
+
+- Capa de integración con herramientas EDB en `migration/edb-tools/`.
+- Exportación de DDL con `DBMS_METADATA` para EDB Migration Portal.
+- Prompts y flujo de revisión para Migration Portal AI Copilot.
+- Wrapper de EDB Migration Toolkit (MTK) para modos offline y online aislado.
+- Configuración y wrapper de EDB LiveCompare para comparar Oracle vs EPAS.
+- Demostración de EDB*Loader con archivo de control y datos.
+- Guía de EDB Replication Server y CDC.
+- Comandos `make portal-export`, `mtk-*`, `livecompare*`, `edbldr-demo` y
+  `tools-check`.
+- Documentos 18 a 22.
+
 ## [1.0.0] - 2026-11-10
 
 ### Añadido

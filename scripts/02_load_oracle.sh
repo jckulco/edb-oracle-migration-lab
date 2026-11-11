@@ -13,6 +13,9 @@ source "${SCRIPT_DIR}/lib/common.sh"
 require_env
 wait_for_health oracle 300
 
+log "Asegurando privilegios del usuario de aplicación..."
+compose exec -T oracle bash /container-entrypoint-initdb.d/01_grants.sh
+
 FILES=(
   00_reset.sql
   01_types.sql

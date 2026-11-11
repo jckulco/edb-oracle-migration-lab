@@ -17,7 +17,8 @@ SCRIPTS := $(ROOT)/scripts
 
 .PHONY: help env venv check up down reset logs ps oracle-load oracle-cli \
         assess edb-schema migrate post-load validate benchmark all test lint \
-        ci clean clean-reports reports
+        ci clean clean-reports reports portal-export mtk-schema mtk-data mtk-full \
+        livecompare-dry-run livecompare livecompare-grant edbldr-demo tools-check
 
 help:
 	@awk 'BEGIN {FS = ":.*##"; printf "\nLaboratorio Oracle -> EPAS\n\nUso: make <objetivo>\n\n"} \
@@ -75,6 +76,33 @@ validate: ## Valida datos y pruebas funcionales
 
 benchmark: ## Ejecuta el benchmark indicativo
 	$(SCRIPTS)/08_benchmark.sh
+
+portal-export: ## Exporta DDL Oracle para EDB Migration Portal
+	$(SCRIPTS)/11_portal_export.sh
+
+mtk-schema: ## Genera DDL offline con EDB Migration Toolkit
+	$(SCRIPTS)/10_mtk.sh offline-schema
+
+mtk-data: ## Genera datos offline con EDB Migration Toolkit
+	$(SCRIPTS)/10_mtk.sh offline-data
+
+mtk-full: ## Genera esquema + datos offline con MTK
+	$(SCRIPTS)/10_mtk.sh offline-full
+
+livecompare-dry-run: ## Valida la configuración de EDB LiveCompare
+	$(SCRIPTS)/12_livecompare.sh --dry-run
+
+livecompare: ## Compara Oracle vs EPAS con EDB LiveCompare
+	$(SCRIPTS)/12_livecompare.sh
+
+livecompare-grant: ## Otorga grants Oracle y ejecuta LiveCompare
+	$(SCRIPTS)/12_livecompare.sh --grant
+
+edbldr-demo: ## Carga regiones.dat con EDB*Loader
+	$(SCRIPTS)/13_edbldr.sh
+
+tools-check: ## Comprueba qué herramientas EDB están instaladas
+	$(SCRIPTS)/14_tools_status.sh
 
 all: up oracle-load edb-schema migrate post-load ## Flujo completo sin validación
 	@echo "Flujo completo. Ejecuta: make validate"

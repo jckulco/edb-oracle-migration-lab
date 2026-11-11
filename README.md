@@ -45,7 +45,8 @@ documentadas.
 | Validación | Conteos, nulos, checksums SHA-256 canónicos y 18 pruebas funcionales |
 | Performance | Benchmark indicativo + guía de índices y planes |
 | Docker | Oracle Free + EPAS, healthchecks, volúmenes y entrypoint propio |
-| Docs | 18 documentos en español, runbook, troubleshooting y checklist de cutover |
+| Herramientas EDB | Migration Portal, MTK, LiveCompare, EDB*Loader, AI Copilot y guía de CDC |
+| Docs | 23 documentos en español, runbook, troubleshooting y checklist de cutover |
 
 ## Arquitectura
 
@@ -121,7 +122,21 @@ make all
 make validate
 ```
 
-### 6. Ver resultados
+### 6. Herramientas EDB (opcional)
+
+Si tienes las herramientas comerciales instaladas:
+
+```bash
+make tools-check        # qué hay disponible
+make portal-export      # DDL para Migration Portal
+make mtk-schema         # DDL offline con MTK
+make edbldr-demo        # carga con EDB*Loader
+make livecompare-grant  # comparación con LiveCompare
+```
+
+Ver [docs/18-herramientas-edb.md](docs/18-herramientas-edb.md).
+
+### 7. Ver resultados
 
 - `migration/reports/assessment.md`
 - `migration/reports/data_load.json`
@@ -143,6 +158,11 @@ make validate
 | `make post-load` | Crea índices, FKs, vistas, MV, paquetes y triggers |
 | `make validate` | Compara datos y ejecuta pruebas funcionales |
 | `make benchmark` | Compara tiempos Oracle vs EPAS |
+| `make portal-export` | Exporta DDL para EDB Migration Portal |
+| `make mtk-schema` / `make mtk-data` | Genera artefactos con EDB Migration Toolkit |
+| `make edbldr-demo` | Carga un archivo con EDB*Loader |
+| `make livecompare` | Compara Oracle vs EPAS con LiveCompare |
+| `make tools-check` | Comprueba las herramientas EDB instaladas |
 | `make reset` | Reconstruye todo desde cero (borra volúmenes) |
 | `make test` | Pruebas unitarias sin base de datos |
 | `make lint` | Ruff, compilación Python y sintaxis Bash |
@@ -162,6 +182,7 @@ make validate
 ├── migration/
 │   ├── config/              # Manifiesto, pruebas funcionales, benchmark
 │   ├── etl/                 # Assessment, ETL, validación, benchmark
+│   ├── edb-tools/           # Portal, MTK, LiveCompare, EDB*Loader, CDC
 │   ├── ora2pg/              # Configuración complementaria
 │   └── reports/             # Salidas generadas (gitignored)
 ├── scripts/                 # Orquestación Bash + Makefile
@@ -177,24 +198,29 @@ make validate
 
 Empieza por el [índice de documentación](docs/README.md). Los documentos clave:
 
-1. [Introducción](docs/00-introduccion.md)
-2. [Arquitectura](docs/01-arquitectura.md)
-3. [Requisitos](docs/02-requisitos.md)
-4. [Habilitar Oracle y EDB en Docker](docs/03-docker-oracle-edb.md) ← **guía de Docker**
-5. [Modelo de datos](docs/04-modelo-datos.md)
-6. [Mapeo de tipos Oracle → EPAS](docs/05-mapeo-tipos-datos.md)
-7. [Migración de esquema](docs/06-migracion-esquema.md)
-8. [Migración de datos](docs/07-migracion-datos.md)
-9. [PL/SQL a EPAS](docs/08-plsql-a-epas.md)
-10. [Índices y rendimiento](docs/09-indices-rendimiento.md)
-11. [Vistas y materializadas](docs/10-vistas-mv.md)
-12. [Triggers y secuencias](docs/11-triggers-secuencias.md)
-13. [Validación](docs/12-validacion.md)
-14. [Runbook](docs/13-runbook.md)
-15. [Troubleshooting](docs/14-troubleshooting.md)
-16. [Post-migración](docs/15-post-migracion.md)
-17. [Ora2Pg](docs/16-ora2pg.md)
-18. [Referencias](docs/17-referencias.md)
+- [Introducción](docs/00-introduccion.md)
+- [Arquitectura](docs/01-arquitectura.md)
+- [Requisitos](docs/02-requisitos.md)
+- [Habilitar Oracle y EDB en Docker](docs/03-docker-oracle-edb.md) ← **guía de Docker**
+- [Modelo de datos](docs/04-modelo-datos.md)
+- [Mapeo de tipos Oracle → EPAS](docs/05-mapeo-tipos-datos.md)
+- [Migración de esquema](docs/06-migracion-esquema.md)
+- [Migración de datos](docs/07-migracion-datos.md)
+- [PL/SQL a EPAS](docs/08-plsql-a-epas.md)
+- [Índices y rendimiento](docs/09-indices-rendimiento.md)
+- [Vistas y materializadas](docs/10-vistas-mv.md)
+- [Triggers y secuencias](docs/11-triggers-secuencias.md)
+- [Validación](docs/12-validacion.md)
+- [Runbook](docs/13-runbook.md)
+- [Troubleshooting](docs/14-troubleshooting.md)
+- [Post-migración](docs/15-post-migracion.md)
+- [Ora2Pg](docs/16-ora2pg.md)
+- [Referencias](docs/17-referencias.md)
+- [Herramientas EDB](docs/18-herramientas-edb.md)
+- [Migration Toolkit](docs/19-mtk.md)
+- [Migration Portal y AI Copilot](docs/20-migration-portal.md)
+- [LiveCompare](docs/21-livecompare.md)
+- [Replication Server](docs/22-replication-server.md)
 
 ## Qué demuestra la migración
 
@@ -211,6 +237,8 @@ Empieza por el [índice de documentación](docs/README.md). Los documentos clave
 - **Triggers/secuencias**: auditoría, historial de precios, identidades y
   resync.
 - **Validación**: checksums canónicos y pruebas funcionales Oracle vs EPAS.
+- **Herramientas EDB**: exportación para Migration Portal, wrapper de MTK,
+  comparación con LiveCompare, carga con EDB*Loader y guía de CDC.
 
 ## Resultados esperados
 

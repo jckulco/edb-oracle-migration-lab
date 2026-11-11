@@ -1,6 +1,6 @@
 # Laboratorio de migración Oracle → EDB Postgres Advanced Server
 
-[![CI](https://github.com/TU_USUARIO/edb-oracle-migration-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/TU_USUARIO/edb-oracle-migration-lab/actions/workflows/ci.yml)
+[![CI](https://github.com/jckulco/edb-oracle-migration-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/jckulco/edb-oracle-migration-lab/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![EDB EPAS 16](https://img.shields.io/badge/EDB%20EPAS-16-2f6f9f.svg)](https://www.enterprisedb.com/docs/epas/latest/)
@@ -295,6 +295,6 @@ respectivos titulares; este es un proyecto educativo independiente.
 
 ## Autor
 
-Laboratorio creado como material de estudio y portafolio. Reemplaza
-`TU_USUARIO` en el badge de CI por tu usuario de GitHub y ajusta el autor en
-`LICENSE` antes de publicar.
+Laboratorio creado por Julio ([@jckulco](https://github.com/jckulco)) como
+material de estudio y portafolio. El repositorio está publicado en
+<https://github.com/jckulco/edb-oracle-migration-lab>.

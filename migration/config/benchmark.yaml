@@ -1,0 +1,54 @@
+version: 1
+
+# Benchmark indicativo, no una prueba científica. Ejecuta cada consulta
+# varias veces y reporta la mediana en milisegundos.
+queries:
+  - id: top_productos
+    description: Top 10 productos por unidades vendidas.
+    oracle: |
+      SELECT producto_id, nombre, unidades, ingreso
+        FROM vw_top_productos
+       ORDER BY ranking
+    edb: |
+      SELECT producto_id, nombre, unidades, ingreso
+        FROM vw_top_productos
+       ORDER BY ranking
+
+  - id: ventas_mensuales
+    description: Agregado mensual con filtro por estado.
+    oracle: |
+      SELECT TO_CHAR(TRUNC(fecha_pedido, 'MM'), 'YYYY-MM') AS mes,
+             COUNT(*) AS pedidos, SUM(total) AS total
+        FROM pedidos
+       WHERE estado <> 'CANCELADO'
+       GROUP BY TRUNC(fecha_pedido, 'MM')
+       ORDER BY 1
+    edb: |
+      SELECT to_char(date_trunc('month', fecha_pedido), 'YYYY-MM') AS mes,
+             count(*) AS pedidos, sum(total) AS total
+        FROM pedidos
+       WHERE estado <> 'CANCELADO'
+       GROUP BY date_trunc('month', fecha_pedido)
+       ORDER BY 1
+
+  - id: clientes_activos
+    description: Vista de clientes activos con join de direcciones.
+    oracle: |
+      SELECT COUNT(*)
+        FROM vw_clientes_activos c
+        JOIN pedidos p ON p.cliente_id = c.cliente_id
+    edb: |
+      SELECT COUNT(*)
+        FROM vw_clientes_activos c
+        JOIN pedidos p ON p.cliente_id = c.cliente_id
+
+  - id: auditoria_reciente
+    description: Últimos eventos de auditoría.
+    oracle: |
+      SELECT COUNT(*)
+        FROM auditoria_cambios
+       WHERE fecha >= TIMESTAMP '2024-01-01 00:00:00 +00:00'
+    edb: |
+      SELECT COUNT(*)
+        FROM auditoria_cambios
+       WHERE fecha >= TIMESTAMPTZ '2024-01-01 00:00:00+00'

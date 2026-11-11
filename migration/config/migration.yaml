@@ -1,0 +1,264 @@
+version: 1
+
+# Origen y destino lógicos.
+oracle_schema: VENTAS
+edb_schema: ventas
+
+# Orden topológico de carga (padres antes que hijos). El ETL lo respeta.
+# columns: columnas del destino EPAS, en el mismo orden que el SELECT Oracle.
+# select: consulta Oracle que produce exactamente esas columnas.
+# pk: columnas usadas para ordenar y comparar en la validación.
+tables:
+  - name: regiones
+    order: 10
+    pk: [region_id]
+    columns:
+      - region_id
+      - nombre
+      - codigo
+    select: |
+      SELECT region_id, nombre, codigo
+        FROM regiones
+
+  - name: paises
+    order: 20
+    pk: [pais_id]
+    columns:
+      - pais_id
+      - codigo
+      - nombre
+      - region_id
+    select: |
+      SELECT pais_id, codigo, nombre, region_id
+        FROM paises
+
+  - name: clientes
+    order: 30
+    pk: [cliente_id]
+    columns:
+      - cliente_id
+      - codigo
+      - nombre
+      - email
+      - telefono
+      - fecha_alta
+      - fecha_nacimiento
+      - segmento
+      - limite_credito
+      - saldo
+      - activo
+      - dir_calle
+      - dir_ciudad
+      - dir_estado
+      - dir_pais
+      - dir_cp
+      - telefonos
+      - notas
+      - datos_extra
+      - creado_en
+      - actualizado_en
+    select: |
+      SELECT c.cliente_id,
+             c.codigo,
+             c.nombre,
+             c.email,
+             c.telefono,
+             c.fecha_alta,
+             c.fecha_nacimiento,
+             c.segmento,
+             c.limite_credito,
+             c.saldo,
+             c.activo,
+             c.direccion.calle         AS dir_calle,
+             c.direccion.ciudad        AS dir_ciudad,
+             c.direccion.estado        AS dir_estado,
+             c.direccion.pais          AS dir_pais,
+             c.direccion.codigo_postal AS dir_cp,
+             (SELECT LISTAGG(column_value, '|')
+                       WITHIN GROUP (ORDER BY column_value)
+                FROM TABLE(c.telefonos))  AS telefonos,
+             c.notas,
+             c.datos_extra,
+             c.creado_en,
+             c.actualizado_en
+        FROM clientes c
+
+  - name: direcciones_entrega
+    order: 40
+    pk: [direccion_id]
+    columns:
+      - direccion_id
+      - cliente_id
+      - etiqueta
+      - calle
+      - ciudad
+      - estado
+      - pais
+      - codigo_postal
+      - es_principal
+    select: |
+      SELECT direccion_id, cliente_id, etiqueta, calle, ciudad, estado,
+             pais, codigo_postal, es_principal
+        FROM direcciones_entrega
+
+  - name: categorias
+    order: 50
+    pk: [categoria_id]
+    columns:
+      - categoria_id
+      - nombre
+      - categoria_padre_id
+      - activo
+    select: |
+      SELECT categoria_id, nombre, categoria_padre_id, activo
+        FROM categorias
+
+  - name: productos
+    order: 60
+    pk: [producto_id]
+    columns:
+      - producto_id
+      - sku
+      - nombre
+      - descripcion
+      - categoria_id
+      - precio
+      - costo
+      - calificacion
+      - peso_kg
+      - garantia_meses
+      - activo
+      - imagen
+      - ficha_xml
+      - atributos
+      - fecha_creacion
+    select: |
+      SELECT producto_id, sku, nombre, descripcion, categoria_id, precio, costo,
+             calificacion, peso_kg, garantia_meses, activo, imagen,
+             ficha_xml.getClobVal() AS ficha_xml,
+             atributos, fecha_creacion
+        FROM productos
+
+  - name: empleados
+    order: 70
+    pk: [empleado_id]
+    columns:
+      - empleado_id
+      - nombre
+      - email
+      - manager_id
+      - fecha_ingreso
+      - salario
+      - comision
+      - activo
+    select: |
+      SELECT empleado_id, nombre, email, manager_id, fecha_ingreso,
+             salario, comision, activo
+        FROM empleados
+
+  - name: pedidos
+    order: 80
+    pk: [pedido_id]
+    columns:
+      - pedido_id
+      - cliente_id
+      - empleado_id
+      - fecha_pedido
+      - fecha_entrega_estimada
+      - fecha_entrega_real
+      - estado
+      - moneda
+      - subtotal
+      - impuesto
+      - descuento
+      - total
+      - notas
+      - creado_por
+      - tiempo_entrega
+      - version
+    select: |
+      SELECT pedido_id, cliente_id, empleado_id, fecha_pedido,
+             fecha_entrega_estimada, fecha_entrega_real, estado, moneda,
+             subtotal, impuesto, descuento, total, notas, creado_por,
+             tiempo_entrega, version
+        FROM pedidos
+
+  - name: pedido_detalle
+    order: 90
+    pk: [detalle_id]
+    columns:
+      - detalle_id
+      - pedido_id
+      - producto_id
+      - cantidad
+      - precio_unitario
+      - descuento_pct
+      - total_linea
+    select: |
+      SELECT detalle_id, pedido_id, producto_id, cantidad, precio_unitario,
+             descuento_pct, total_linea
+        FROM pedido_detalle
+
+  - name: pagos
+    order: 100
+    pk: [pago_id]
+    columns:
+      - pago_id
+      - pedido_id
+      - fecha_pago
+      - metodo
+      - monto
+      - referencia
+      - confirmado
+      - datos_respuesta
+    select: |
+      SELECT pago_id, pedido_id, fecha_pago, metodo, monto, referencia,
+             confirmado, datos_respuesta
+        FROM pagos
+
+  - name: auditoria_cambios
+    order: 110
+    pk: [auditoria_id]
+    columns:
+      - auditoria_id
+      - tabla
+      - operacion
+      - pk_valor
+      - usuario
+      - fecha
+      - datos_antes
+      - datos_despues
+      - origen
+    select: |
+      SELECT auditoria_id, tabla, operacion, pk_valor, usuario, fecha,
+             datos_antes, datos_despues, origen
+        FROM auditoria_cambios
+
+  - name: precios_historial
+    order: 120
+    pk: [historial_id]
+    columns:
+      - historial_id
+      - producto_id
+      - precio_anterior
+      - precio_nuevo
+      - fecha
+      - usuario
+    select: |
+      SELECT historial_id, producto_id, precio_anterior, precio_nuevo,
+             fecha, usuario
+        FROM precios_historial
+
+# Secuencias Oracle que se recrean en EPAS y se resincronizan post-carga.
+sequences:
+  - {name: seq_clientes,    table: clientes,            column: cliente_id}
+  - {name: seq_direcciones, table: direcciones_entrega, column: direccion_id}
+  - {name: seq_pedidos,     table: pedidos,             column: pedido_id}
+  - {name: seq_pagos,       table: pagos,               column: pago_id}
+  - {name: seq_historial,   table: precios_historial,   column: historial_id}
+
+# Columnas con identidad nativa en EPAS; su secuencia interna también se resincroniza.
+identity_columns:
+  - {table: productos,          column: producto_id}
+  - {table: pedido_detalle,     column: detalle_id}
+  - {table: auditoria_cambios,  column: auditoria_id}

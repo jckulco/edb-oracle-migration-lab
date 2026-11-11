@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edb-oracle-migration-lab"
+version = "1.0.0"
+description = "Laboratorio de migración Oracle Database -> EDB Postgres Advanced Server"
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["migration/reports"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

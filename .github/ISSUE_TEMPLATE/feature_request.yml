@@ -1,0 +1,29 @@
+name: Mejora o nuevo caso de migración
+description: Propón una tabla, tipo, objeto o validación adicional.
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Caso de uso
+      description: ¿Qué capacidad de Oracle/EPAS falta en el laboratorio?
+    validations:
+      required: true
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Propuesta
+      description: Describe el objeto Oracle, su equivalente EPAS y cómo probarlo.
+    validations:
+      required: true
+  - type: checkboxes
+    id: alcance
+    attributes:
+      label: Alcance
+      options:
+        - label: Incluye DDL Oracle
+        - label: Incluye DDL EPAS
+        - label: Incluye datos de prueba
+        - label: Incluye validación automática
+        - label: Incluye documentación

@@ -1,0 +1,107 @@
+version: 1
+
+# Pruebas funcionales no destructivas: se ejecutan en ambos motores y se
+# comparan los resultados. expected es opcional y se valida en ambos lados.
+tests:
+  - id: descuento_cliente_a
+    description: Cliente segmento A con monto alto recibe 8%.
+    oracle: "SELECT pkg_ventas.descuento_cliente(3, 10000) FROM dual"
+    edb: "SELECT pkg_ventas.descuento_cliente(3, 10000)"
+    expected: 800
+
+  - id: descuento_cliente_a_bajo
+    description: Cliente segmento A con monto bajo recibe 5%.
+    oracle: "SELECT pkg_ventas.descuento_cliente(3, 1000) FROM dual"
+    edb: "SELECT pkg_ventas.descuento_cliente(3, 1000)"
+    expected: 50
+
+  - id: descuento_cliente_b
+    description: Cliente segmento B recibe 3%.
+    oracle: "SELECT pkg_ventas.descuento_cliente(1, 10000) FROM dual"
+    edb: "SELECT pkg_ventas.descuento_cliente(1, 10000)"
+    expected: 300
+
+  - id: descuento_cliente_c
+    description: Cliente segmento C no recibe descuento.
+    oracle: "SELECT pkg_ventas.descuento_cliente(2, 10000) FROM dual"
+    edb: "SELECT pkg_ventas.descuento_cliente(2, 10000)"
+    expected: 0
+
+  - id: total_pedido
+    description: La suma del detalle coincide con el total calculado.
+    oracle: "SELECT pkg_ventas.total_pedido(1) FROM dual"
+    edb: "SELECT pkg_ventas.total_pedido(1)"
+
+  - id: estado_pedido
+    description: Lectura de estado desde el paquete.
+    oracle: "SELECT pkg_ventas.estado_pedido(2) FROM dual"
+    edb: "SELECT pkg_ventas.estado_pedido(2)"
+    expected: CONFIRMADO
+
+  - id: formato_moneda
+    description: Formato numérico estable entre motores.
+    oracle: "SELECT pkg_util.formatear_moneda(1234.5) FROM dual"
+    edb: "SELECT pkg_util.formatear_moneda(1234.5)"
+    expected: "MXN 1,234.50"
+
+  - id: dia_habil
+    description: 2025-01-06 fue lunes.
+    oracle: "SELECT pkg_util.es_dia_habil(DATE '2025-01-06') FROM dual"
+    edb: "SELECT pkg_util.es_dia_habil(DATE '2025-01-06')"
+    expected: S
+
+  - id: impuesto
+    description: Función suelta de impuesto.
+    oracle: "SELECT fn_calcular_impuesto(1000) FROM dual"
+    edb: "SELECT fn_calcular_impuesto(1000)"
+    expected: 160
+
+  - id: promedio_cliente
+    description: Función suelta con agregado.
+    oracle: "SELECT fn_promedio_ventas_cliente(3) FROM dual"
+    edb: "SELECT fn_promedio_ventas_cliente(3)"
+
+  - id: clientes_activos
+    description: La vista filtra al cliente inactivo 60.
+    oracle: "SELECT COUNT(*) FROM vw_clientes_activos"
+    edb: "SELECT COUNT(*) FROM vw_clientes_activos"
+    expected: 59
+
+  - id: jerarquia_empleados
+    description: La vista jerárquica devuelve los 15 empleados.
+    oracle: "SELECT COUNT(*) FROM vw_jerarquia_empleados"
+    edb: "SELECT COUNT(*) FROM vw_jerarquia_empleados"
+    expected: 15
+
+  - id: top_productos
+    description: El ranking devuelve 10 filas.
+    oracle: "SELECT COUNT(*) FROM vw_top_productos"
+    edb: "SELECT COUNT(*) FROM vw_top_productos"
+    expected: 10
+
+  - id: ultimos_pedidos
+    description: Top 10 con ROWNUM vs LIMIT.
+    oracle: "SELECT COUNT(*) FROM vw_ultimos_pedidos"
+    edb: "SELECT COUNT(*) FROM vw_ultimos_pedidos"
+    expected: 10
+
+  - id: mv_ventas_mensuales
+    description: La MV coincide en número de meses.
+    oracle: "SELECT COUNT(*) FROM mv_ventas_mensuales"
+    edb: "SELECT COUNT(*) FROM mv_ventas_mensuales"
+
+  - id: ventas_no_canceladas
+    description: Agregado de negocio.
+    oracle: "SELECT SUM(total) FROM pedidos WHERE estado <> 'CANCELADO'"
+    edb: "SELECT SUM(total) FROM pedidos WHERE estado <> 'CANCELADO'"
+
+  - id: auditoria_clientes
+    description: La auditoría migrada conserva eventos de clientes.
+    oracle: "SELECT COUNT(*) FROM auditoria_cambios WHERE tabla = 'CLIENTES'"
+    edb: "SELECT COUNT(*) FROM auditoria_cambios WHERE tabla = 'CLIENTES'"
+
+  - id: contar_pedidos
+    description: Conteo dinámico con nombres de tabla distintos.
+    oracle: "SELECT pkg_mantenimiento.contar('PEDIDOS') FROM dual"
+    edb: "SELECT pkg_mantenimiento.contar('pedidos')"
+    expected: 300

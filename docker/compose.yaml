@@ -1,0 +1,74 @@
+# =============================================================================
+# Laboratorio: Oracle Database Free + EDB Postgres Advanced Server
+#
+# Uso (desde la raíz del repositorio):
+#   cp .env.example .env
+#   docker compose --env-file .env -f docker/compose.yaml up -d
+#
+# La imagen de EPAS es comercial y requiere acceso al registro de EDB.
+# Revisa docs/03-docker-oracle-edb.md antes del primer arranque.
+# =============================================================================
+
+name: edb-oracle-migration-lab
+
+services:
+  oracle:
+    image: ${ORACLE_IMAGE:-gvenzl/oracle-free:23-slim}
+    container_name: lab-oracle
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:?Define ORACLE_PASSWORD en .env}
+      APP_USER: ${ORACLE_APP_USER:-ventas}
+      APP_USER_PASSWORD: ${ORACLE_APP_PASSWORD:?Define ORACLE_APP_PASSWORD en .env}
+      ORACLE_PDB: ${ORACLE_PDB:-FREEPDB1}
+    ports:
+      - "${ORACLE_PORT:-1521}:1521"
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+      - ./oracle/init:/container-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 60s
+      start_interval: 10s
+    shm_size: "1gb"
+    restart: unless-stopped
+
+  edb:
+    build:
+      context: ./edb
+      args:
+        EDB_IMAGE: ${EDB_IMAGE:?Define EDB_IMAGE en .env (requiere acceso al registro de EDB)}
+        EDB_MAJOR: ${EDB_MAJOR:-16}
+    container_name: lab-edb
+    platform: ${EDB_PLATFORM:-linux/amd64}
+    environment:
+      EDB_PASSWORD: ${EDB_PASSWORD:?Define EDB_PASSWORD en .env}
+      EDB_APP_USER: ${EDB_APP_USER:-ventas}
+      EDB_APP_PASSWORD: ${EDB_APP_PASSWORD:?Define EDB_APP_PASSWORD en .env}
+      EDB_DB: ${EDB_DB:-ventas}
+      EDB_PORT: "5444"
+      EDB_OS_USER: ${EDB_OS_USER:-postgres}
+      TZ: ${TZ:-America/Mexico_City}
+    ports:
+      - "${EDB_PORT:-5444}:5444"
+    volumes:
+      - edb_data:/var/lib/edb
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -h 127.0.0.1 -p 5444 -U $${EDB_APP_USER} -d $${EDB_DB}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  oracle_data:
+    name: edb_oracle_lab_oradata
+  edb_data:
+    name: edb_oracle_lab_epasdata

@@ -1,0 +1,6 @@
+# Dependencias del ETL del laboratorio.
+# python-oracledb en modo thin: no requiere Oracle Instant Client.
+oracledb>=2.4,<3.0
+psycopg[binary]>=3.2,<4.0
+python-dotenv>=1.0,<2.0
+PyYAML>=6.0,<7.0

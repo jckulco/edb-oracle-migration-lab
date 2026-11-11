@@ -1,0 +1,45 @@
+name: Reporte de error
+description: Algo del laboratorio no funciona como se documenta.
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por reportar. Antes de continuar, revisa
+        `docs/14-troubleshooting.md` y los logs con `make logs`.
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: ¿Qué esperabas que pasara y qué pasó realmente?
+    validations:
+      required: true
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducir
+      placeholder: |
+        1. make up
+        2. make oracle-load
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: entorno
+    attributes:
+      label: Entorno
+      description: SO, arquitectura, versiones de Docker, Python y EDB.
+      placeholder: |
+        - SO: Ubuntu 24.04
+        - Docker: 27.x
+        - Python: 3.12
+        - EDB: EPAS 16.9
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs relevantes
+      description: Pega solo las líneas necesarias. No incluyas credenciales.
+      render: shell

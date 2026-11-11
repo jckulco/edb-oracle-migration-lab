@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    name: Lint, compilación y pruebas unitarias
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: migration/requirements-dev.txt
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r migration/requirements-dev.txt
+
+      - name: Ruff
+        run: ruff check migration tests
+
+      - name: Compilar Python
+        run: python -m compileall -q migration tests
+
+      - name: Pytest
+        run: pytest
+
+      - name: Sintaxis de Bash
+        run: |
+          set -euo pipefail
+          for f in scripts/*.sh scripts/lib/*.sh \
+                   docker/oracle/init/*.sh docker/edb/*.sh; do
+            echo "bash -n $f"
+            bash -n "$f"
+          done
+
+      - name: Validar Compose
+        run: |
+          cp .env.example .env
+          docker compose --env-file .env -f docker/compose.yaml config --quiet

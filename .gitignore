@@ -1,0 +1,40 @@
+# Entorno y credenciales
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Reportes generados por el laboratorio
+migration/reports/*
+!migration/reports/.gitkeep
+
+# Volcados y artefactos temporales
+.tmp/
+*.dmp
+*.log
+*.csv
+!tests/fixtures/*.csv
+
+# Docker / IDE / sistema
+.docker/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Datos locales de bases de datos (si se montan en el repo)
+oradata/
+pgdata/
+
+# Herramientas de calidad
+.ruff_cache/
